@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95669734352",
+    "project_id": "sillywillyonweed",
+    "storage_bucket": "sillywillyonweed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95669734352:android:ae09096d8f6539399407d5",
+        "android_client_info": {
+          "package_name": "com.example.nova"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJjK5vNf7zSdlm4ddk-SjZgmNLysW_qfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

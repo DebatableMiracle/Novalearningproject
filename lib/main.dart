@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nova/firebase_options.dart';
 import 'package:nova/views/login_view.dart';
 import 'package:nova/views/register_view.dart';
+import 'package:nova/views/verify_email_view.dart';
 // Import the Firebase Core package
 
 void main() {
@@ -34,7 +36,16 @@ class HomePage extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              // final user = FirebaseAuth.instance.currentUser;
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                if (user.emailVerified) {
+                  print('Email is verified');
+                } else {
+                  return const VerifyEmailView();
+                }
+              } else {
+                return const LoginView();
+              }
               // if (user?.emailVerified ?? false) {
               //   return const Text(
               //       "You're already Verified, chill out mate");
@@ -42,7 +53,7 @@ class HomePage extends StatelessWidget {
               //   print(user);
               //   return const VerifyEmailView();
               // }
-              return const LoginView();
+              return const Text("Done");
 
             default:
               return const Text("Loading...");
@@ -50,4 +61,3 @@ class HomePage extends StatelessWidget {
         });
   }
 }
-

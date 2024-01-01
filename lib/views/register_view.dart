@@ -37,7 +37,8 @@ class _MyHomePageState extends State<RegisterView> {
         title: const Text("Register!"),
         backgroundColor: const Color.fromARGB(255, 255, 120, 120),
       ),
-      body: Column(children: [
+      body: Column(
+        children: [
         TextField(
           decoration:
               const InputDecoration(hintText: "Enter your E-mail here broski"),
@@ -65,17 +66,18 @@ class _MyHomePageState extends State<RegisterView> {
                 // ignore: unused_local_variable
                 final userCredential = FirebaseAuth.instance
                     .createUserWithEmailAndPassword(
-                        email: email, password: password);
+                        email: email, password: password,);
                 devtools.log(userCredential.toString());
               } on FirebaseAuthException catch (e) {
-                if (e.code == 'weak-password') {
+                devtools.log(e.toString());
+
+                if (e.code == "weak-password") {
                   devtools.log('Weak Password');
                 } else if (e.code == 'email-already-in-use') {
                   devtools.log('E-mail is already in use');
                 } else if (e.code == 'invalid-email') {
                   devtools.log("are you stoopid? Invalid E-mail");
                 }
-                devtools.log(e.code);
               }
             },
             child: const Text("click to Register")),

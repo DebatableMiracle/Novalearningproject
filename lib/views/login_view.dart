@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nova/constants/routes.dart';
-import 'package:nova/firebase_options.dart';
 import 'dart:developer' as devtools show log;
+
+import 'package:nova/firebase_options.dart';
+import 'package:nova/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -31,54 +33,65 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: const Color.fromARGB(255, 255, 120, 120),
       ),
-      body: Column(children: [
-        TextField(
-          decoration:
-              const InputDecoration(hintText: "Enter your E-mail here "),
-          controller: _email,
-          keyboardType: TextInputType.emailAddress,
-          enableSuggestions: false,
-          autocorrect: false,
-        ),
-        TextField(
-          decoration: const InputDecoration(
+      body: Column(
+        children: [
+          TextField(
+            decoration: const InputDecoration(hintText: "Enter your E-mail here "),
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            enableSuggestions: false,
+            autocorrect: false,
+            ),
+          TextField(
+            decoration: const InputDecoration(
               hintText: "Enter your password, totally safe uwu"),
-          controller: _password,
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-        ),
-        TextButton(
+            controller: _password,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            ),
+          TextButton(
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
               await Firebase.initializeApp(
                 options: DefaultFirebaseOptions.currentPlatform,
               );
-              // ignore: unused_local_variable
+
               try {
-                final userCredential = FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: email, password: password);
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: email,
+                  password: password,
+                );
+
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  notesRoute,
+                  (route) => false,
+                );
               } on FirebaseAuthException catch (e) {
-                if (e.code == 'user-not-found') {
-                  devtools.log('User not found');
-                } else if (e.code == 'wrong-password') {
-                  devtools.log('Wrong password bruh try harder');
+                devtools.log(e.code.toString());
+                if (e.code == 'user-not-found') {                  
+                  await showErrorDialog(
+                    context,
+                    'User not found!',
+                  );
+                } else if (e.code == 'invalid-credential') {
+                  await showErrorDialog(                    
+                    context,
+                    'Wrong credentials!',
+                  );
                 }
               } catch (e) {
-                debugPrint(
-                    "Bruh something happened and I'm not really optimistic about it");
-                devtools.log(e.runtimeType.toString());
-                devtools.log(e.toString());
+                await showErrorDialog(
+                  context,
+                  e.toString(),
+                );
               }
 
               //devtools.log(userCredential);
@@ -96,3 +109,4 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+

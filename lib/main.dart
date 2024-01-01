@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:nova/constants/routes.dart';
 import 'package:nova/firebase_options.dart';
 import 'package:nova/views/login_view.dart';
 import 'package:nova/views/register_view.dart';
@@ -19,11 +20,11 @@ void main() {
           scaffoldBackgroundColor: const Color(0xFFFFF8E1),
           appBarTheme: const AppBarTheme(
               backgroundColor: Color.fromARGB(255, 255, 125, 125))),
-      home: const HomePage(),
+      home: const RegisterView(),
       routes: {
-        '/notes/': (context) => const NotesView(),
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
       }));
 }
 
@@ -87,7 +88,7 @@ class _NotesViewState extends State<NotesView> {
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login/', (route) => false);
+                        .pushNamedAndRemoveUntil(loginRoute, (route) => false);
                   }
                   devtools.log(shouldLogout.toString());
                   break;

@@ -5,6 +5,8 @@ import 'package:nova/constants/routes.dart';
 import 'package:nova/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:nova/utilities/show_error_dialog.dart';
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -37,8 +39,7 @@ class _MyHomePageState extends State<RegisterView> {
         title: const Text("Register!"),
         backgroundColor: const Color.fromARGB(255, 255, 120, 120),
       ),
-      body: Column(
-        children: [
+      body: Column(children: [
         TextField(
           decoration:
               const InputDecoration(hintText: "Enter your E-mail here broski"),
@@ -64,20 +65,37 @@ class _MyHomePageState extends State<RegisterView> {
                   options: DefaultFirebaseOptions.currentPlatform,
                 );
                 // ignore: unused_local_variable
-                final userCredential = FirebaseAuth.instance
-                    .createUserWithEmailAndPassword(
-                        email: email, password: password,);
-                devtools.log(userCredential.toString());
+                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: email,
+                  password: password,
+                );
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.sendEmailVerification();
+                Navigator.of(context).pushNamed(verifyemailRoute);
               } on FirebaseAuthException catch (e) {
-                devtools.log(e.toString());
+                devtools.log(e.code.toString());
 
-                if (e.code == "weak-password") {
-                  devtools.log('Weak Password');
+                if (e.code == 'weak-password') {
+                  await showErrorDialog(
+                    context,
+                    'Weak Password \n Tip: minimum length is only 6 characters!',
+                  );
+                  devtools.log('weak Password');
                 } else if (e.code == 'email-already-in-use') {
-                  devtools.log('E-mail is already in use');
+                  await showErrorDialog(
+                    context,
+                    'E mail already in use.',
+                  );
                 } else if (e.code == 'invalid-email') {
-                  devtools.log("are you stoopid? Invalid E-mail");
+                  await showErrorDialog(
+                    context,
+                    'Invalid E-mail \n Make sure you\'ve entered your correct E-mail',
+                  );
+                } else {
+                  showErrorDialog(context, 'Error ${e.code}');
                 }
+              } catch (e) {
+                showErrorDialog(context, e.toString());
               }
             },
             child: const Text("click to Register")),

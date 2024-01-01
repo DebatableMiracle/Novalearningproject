@@ -21,6 +21,7 @@ void main() {
               backgroundColor: Color.fromARGB(255, 255, 125, 125))),
       home: const HomePage(),
       routes: {
+        '/notes/': (context) => const NotesView(),
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
       }));

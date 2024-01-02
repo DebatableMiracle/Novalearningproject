@@ -33,30 +33,30 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: const Color.fromARGB(255, 255, 120, 120),
       ),
-      body: Column(
-        children: [
-          TextField(
-            decoration: const InputDecoration(hintText: "Enter your E-mail here "),
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            enableSuggestions: false,
-            autocorrect: false,
-            ),
-          TextField(
-            decoration: const InputDecoration(
+      body: Column(children: [
+        TextField(
+          decoration:
+              const InputDecoration(hintText: "Enter your E-mail here "),
+          controller: _email,
+          keyboardType: TextInputType.emailAddress,
+          enableSuggestions: false,
+          autocorrect: false,
+        ),
+        TextField(
+          decoration: const InputDecoration(
               hintText: "Enter your password, totally safe uwu"),
-            controller: _password,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            ),
-          TextButton(
+          controller: _password,
+          obscureText: true,
+          enableSuggestions: false,
+          autocorrect: false,
+        ),
+        TextButton(
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
@@ -69,20 +69,30 @@ class _LoginViewState extends State<LoginView> {
                   email: email,
                   password: password,
                 );
-
-                Navigator.of(context).pushNamedAndRemoveUntil(
+                final user = FirebaseAuth.instance.currentUser;
+                if (user?.emailVerified ?? false) {
+                  //User's email is verified
+                  Navigator.of(context).pushNamedAndRemoveUntil(
                   notesRoute,
                   (route) => false,
                 );
+                } else { 
+                  // User's email is not verified
+                   
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                  verifyemailRoute,
+                  (route) => false,
+                );
+                }
               } on FirebaseAuthException catch (e) {
                 devtools.log(e.code.toString());
-                if (e.code == 'user-not-found') {                  
+                if (e.code == 'user-not-found') {
                   await showErrorDialog(
                     context,
                     'User not found!',
                   );
                 } else if (e.code == 'invalid-credential') {
-                  await showErrorDialog(                    
+                  await showErrorDialog(
                     context,
                     'Wrong credentials!',
                   );
@@ -109,4 +119,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-

@@ -1,13 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:nova/firebase_options.dart';
 import 'package:nova/services/auth/auth_user.dart';
 import 'package:nova/services/auth/auth_exceptions.dart';
 import 'package:nova/services/auth/auth_provider.dart';
-
+import 'dart:developer' as devtools show log;
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
 
-
-
 class FirebaseAuthProvider implements AuthProvider {
+  @override
+   Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
   @override
   Future<AuthUser> createUser({
     required String email,
@@ -25,6 +32,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
+      devtools.log('Firebase Error Code: ${e.code}');
       if (e.code == 'weak-password') {
         throw WeakPasswordAuthException();
       } else if (e.code == 'email-already-in-use') {
@@ -35,6 +43,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw GenericAuthException();
       }
     } catch (_) {
+      devtools.log('Firebase Error Code: ${_}');
       throw GenericAuthException();
     }
   }
@@ -65,33 +74,27 @@ class FirebaseAuthProvider implements AuthProvider {
       } else {
         throw UserNotLoggedInAuthException();
       }
-
     } on FirebaseAuthException catch (e) {
-       if (e.code == 'user-not-found') {
-        throw UserNotFoundAuthException();           
-        } 
-       else if (e.code == 'invalid-credential'){
+      if (e.code == 'user-not-found') {
+        throw UserNotFoundAuthException();
+      } else if (e.code == 'invalid-credential') {
         throw InvalidCredentialAuthException();
-        }
-    } catch (e) {
-      throw GenericAuthException();
-              }
-
+      } else {
+        throw GenericAuthException();
+      }
     } catch (_) {
       throw GenericAuthException();
-      }
+    }
   }
 
   @override
-  Future<void> logOut() {
+  Future<void> logOut() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user  != null) {
+    if (user != null) {
       await FirebaseAuth.instance.signOut();
     } else {
       throw UserNotLoggedInAuthException();
     }
-
-    
   }
 
   @override
@@ -103,4 +106,4 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
-
+}

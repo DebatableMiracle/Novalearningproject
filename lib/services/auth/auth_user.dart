@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth show User;
+// ignore: unused_import
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth show User;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 

@@ -39,7 +39,7 @@ class _NotesViewState extends State<NotesView> {
             })
           ],
         ),
-        body: const Text("Wow It's been a long time since anything worked tbh"));
+        body: const Text("Aww mann!"));
   }
 }
 

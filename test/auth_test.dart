@@ -2,7 +2,8 @@ import 'package:nova/services/auth/auth_exceptions.dart';
 import 'package:nova/services/auth/auth_provider.dart';
 import 'package:nova/services/auth/auth_user.dart';
 import 'package:test/test.dart';
-
+//These do not work and at this point idk how to fix it right now.
+// I'll fix it soon but not right now lol
 void main() {
   group('Mock Authentication', () {
     final provider = MockAuthProvider();

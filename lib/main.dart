@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nova/constants/routes.dart';
 import 'package:nova/services/auth/auth_service.dart';
 import 'package:nova/views/login_view.dart';
-import 'package:nova/views/notes_view.dart';
+import 'package:nova/views/notes/new_note_view.dart';
+import 'package:nova/views/notes/notes_view.dart';
 import 'package:nova/views/register_view.dart';
 import 'package:nova/views/verify_email_view.dart';
+import 'package:path/path.dart';
 //import 'dart:developer' as devtools show log;
 // Import the Firebase Core package
 
@@ -25,6 +27,7 @@ void main() {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
         verifyemailRoute: (context) => const VerifyEmailView(),
+        newNoteRoute: (context) => const NewNoteView(),
       }));
 }
 

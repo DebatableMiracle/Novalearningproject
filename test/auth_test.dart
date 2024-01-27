@@ -2,6 +2,7 @@ import 'package:nova/services/auth/auth_exceptions.dart';
 import 'package:nova/services/auth/auth_provider.dart';
 import 'package:nova/services/auth/auth_user.dart';
 import 'package:test/test.dart';
+
 //These do not work and at this point idk how to fix it right now.
 // I'll fix it soon but not right now lol
 void main() {
@@ -12,10 +13,10 @@ void main() {
     });
     test('Cannot Log out if not initialized', () {
       expect(
-      provider.logOut(),
-      throwsA(const TypeMatcher<NotInitializedException>()),
-    );
-    });   
+        provider.logOut(),
+        throwsA(const TypeMatcher<NotInitializedException>()),
+      );
+    });
     test('SHould be able to initialized', () async {
       await provider.initialize();
       expect(provider.isInitialized, true);
@@ -98,7 +99,10 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     if (email == 'foo@bar.com') throw UserNotFoundAuthException();
     if (password == 'foobar') throw InvalidCredentialAuthException();
-    const user = AuthUser(isEmailVerified: false);
+    const user = AuthUser(
+      isEmailVerified: false,
+      email: 'foo@bar.com',
+    );
     return Future.value(user);
   }
 
@@ -117,7 +121,10 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     final user = _user;
     if (user == null) throw UserNotFoundAuthException();
-    const newUser = AuthUser(isEmailVerified: true);
+    const newUser = AuthUser(
+      isEmailVerified: true,
+      email: 'foo@bar.com',
+    );
     _user = newUser;
   }
 }

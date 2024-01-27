@@ -36,7 +36,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 (route) => false,
               );
             },
-            child: Text('Go back to Sign in page'))
+            child: const Text('Go back to Sign in page'))
       ]),
     );
   }

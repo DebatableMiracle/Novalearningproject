@@ -58,6 +58,7 @@ class _NotesViewState extends State<NotesView> {
           ],
         ),
         body: FutureBuilder(
+            
             future: _notesService.getOrCreateUser(email: userEmail),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
@@ -78,8 +79,9 @@ class _NotesViewState extends State<NotesView> {
                                   await _notesService.deleteNote(id: note.id);
                                 },
                                 onTap: (note) {
-                                  Navigator.of(context)
-                                      .pushNamed(createOrUpdateNoteRoute, arguments: note);
+                                  Navigator.of(context).pushNamed(
+                                      createOrUpdateNoteRoute,
+                                      arguments: note);
                                 },
                               );
                             } else {

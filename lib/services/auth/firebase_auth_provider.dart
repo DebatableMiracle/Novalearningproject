@@ -43,7 +43,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw GenericAuthException();
       }
     } catch (_) {
-      devtools.log('Firebase Error Code: ${_}');
+      devtools.log('Firebase Error Code: $_');
       throw GenericAuthException();
     }
   }

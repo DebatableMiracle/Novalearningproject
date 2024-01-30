@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 extension Filter<T> on Stream<List<T>> {
   Stream<List<T>> filter(bool Function(T) where) =>

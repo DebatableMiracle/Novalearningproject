@@ -101,7 +101,7 @@ class MockAuthProvider implements AuthProvider {
     if (password == 'foobar') throw InvalidCredentialAuthException();
     const user = AuthUser(
       isEmailVerified: false,
-      email: 'foo@bar.com',
+      email: 'foo@bar.com', id: '',
     );
     return Future.value(user);
   }
@@ -123,7 +123,7 @@ class MockAuthProvider implements AuthProvider {
     if (user == null) throw UserNotFoundAuthException();
     const newUser = AuthUser(
       isEmailVerified: true,
-      email: 'foo@bar.com',
+      email: 'foo@bar.com', id: '',
     );
     _user = newUser;
   }
